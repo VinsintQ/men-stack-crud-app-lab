@@ -12,12 +12,12 @@
     res.redirect('/cars');
 
   }
-
+const showone = 0;
 
   const viewall = async (req,res,next)=>{
     
   const cars =  await  Cars.find({});
-  console.log(cars)
+  
   res.render('cars/index.ejs',{cars})
   }
 

@@ -16,19 +16,38 @@ app.use(methodOverride("_method"));
 //  --------LANDING-PAGE-----------     
 app.get("/", carsCtrl.index)
 
-// --------SHOW-PAGE-------------
+// --------menu-PAGE-------------
 app.get("/cars",carsCtrl.viewall)
 
-//-------ADING PAGE-------------
+//-------ADING-PAGE-------------
 app.get("/cars/new",async (req,res,next)=>{
 res.render('cars/new.ejs');
 }) 
 app.post('/cars',carsCtrl.newcar)
-//----------EDITING-PAGE--------
+//----------SHPW-SPECIFIC-CAR--------
 
-app.get("/cars/:id",(req,res)=>{
-  res.render('cars/edit.ejs')
+app.get("/cars/:id",async(req,res,next)=>{
+  const car =await Cars.findById(req.params.id);
+  res.render('cars/show.ejs',{car})
 })
+
+//--------EDIT-CAR------------
+app.get("/cars/:id/edit",async (req,res,next)=>{
+  const car = await Cars.findById(req.params.id);
+  res.render('cars/edit.ejs', { car });
+})
+
+app.put("/cars/:id",async (req, res, next) => {
+  await Cars.findByIdAndUpdate(req.params.id, req.body);
+   res.redirect(`/cars/${req.params.id}`);
+})
+//--------DELETE-CAR---------
+
+app.delete("/cars/:id",async (req, res, next) => {
+  await Cars.findByIdAndDelete(req.params.id);
+   res.redirect(`/cars`);
+})
+
 
 
 
